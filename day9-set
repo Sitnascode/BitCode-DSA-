@@ -1,0 +1,18 @@
+#Find the total number of distinct country stamps
+
+# Read the total number of stamps from the user input
+N = int(input())
+
+# Initialize an empty set to store unique stamp names
+s = set()
+
+# Loop N times to collect each stamp name
+for i in range(N):
+    # Read the current stamp name from the input
+    stamp = input()
+    
+    # Add the stamp to the set (duplicates are automatically ignored)
+    s.add(stamp)
+
+# Print the total number of unique stamps using the len() function
+print(len(s))
