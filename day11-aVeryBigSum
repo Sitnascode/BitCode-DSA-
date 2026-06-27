@@ -1,0 +1,71 @@
+'use strict';
+
+const fs = require('fs');
+
+// Initialize stream reading for standard input
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', function(inputStdin) {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', function() {
+    inputString = inputString.split('\n');
+    main();
+});
+
+/**
+ * Reads the next line from the buffered input stream.
+ * @returns {string} The raw line string.
+ */
+function readLine() {
+    return inputString[currentLine++];
+}
+
+/**
+ * Calculates the sum of an array of big integers.
+ * 
+ * @param {BigInt[]} ar - An array of large integers.
+ * @returns {BigInt} The total sum of the array elements.
+ */
+function aVeryBigSum(ar) {
+    let sum = 0n;
+    
+    for (const num of ar) {
+        sum += num;
+    }
+    
+    return sum;
+}
+
+/**
+ * Main execution block handles input parsing and output writing.
+ */
+function main() {
+    const outputPath = process.env.OUTPUT_PATH;
+    const ws = outputPath ? fs.createWriteStream(outputPath) : process.stdout;
+
+    // Read the array size configuration line
+    const arCountRaw = readLine();
+    if (!arCountRaw) return;
+
+    // Parse input integers safely straight into BigInt tokens
+    const ar = readLine()
+        .replace(/\s+$/g, '')
+        .split(' ')
+        .map(arTemp => BigInt(arTemp));
+     
+    // Compute the arbitrary precision sum
+    const result = aVeryBigSum(ar);
+
+    // BigInt instances must be converted to strings for safe text stream outputs
+    ws.write(result.toString() + '\n');
+
+    if (outputPath) {
+        ws.end();
+    }
+}
